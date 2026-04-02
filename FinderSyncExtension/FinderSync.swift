@@ -17,8 +17,16 @@ class FinderSync: FIFinderSync {
 
         switch tag {
         case MenuBuilder.Tag.newTextFile.rawValue:
-            guard let targetURL = FIFinderSyncController.default().targetedURL() else { return }
-            FileActions.createNewTextFile(in: targetURL)
+            guard let targetDirectoryURL = currentTargetDirectoryURL() else { return }
+            FileActions.createNewTextFile(in: targetDirectoryURL)
+
+        case MenuBuilder.Tag.saveFilesFromClipboard.rawValue:
+            guard let targetDirectoryURL = currentTargetDirectoryURL() else { return }
+            FileActions.saveFilesFromClipboard(to: targetDirectoryURL)
+
+        case MenuBuilder.Tag.saveTextFromClipboard.rawValue:
+            guard let targetDirectoryURL = currentTargetDirectoryURL() else { return }
+            FileActions.saveTextFromClipboard(to: targetDirectoryURL)
 
         case MenuBuilder.Tag.copyFileName.rawValue,
              MenuBuilder.Tag.copyAllFileNames.rawValue:
@@ -31,8 +39,8 @@ class FinderSync: FIFinderSync {
             FileActions.copyFilePaths(from: urls)
 
         case MenuBuilder.Tag.chooseApp.rawValue:
-            guard let targetURL = FIFinderSyncController.default().targetedURL() else { return }
-            AppLauncher.shared.chooseAndLaunchApp(currentDirectory: targetURL)
+            guard let targetDirectoryURL = currentTargetDirectoryURL() else { return }
+            AppLauncher.shared.chooseAndLaunchApp(currentDirectory: targetDirectoryURL)
 
         default:
             if tag >= MenuBuilder.Tag.recentAppBase.rawValue
@@ -40,9 +48,23 @@ class FinderSync: FIFinderSync {
                 let index = tag - MenuBuilder.Tag.recentAppBase.rawValue
                 let recentApps = AppLauncher.shared.recentApps
                 guard index < recentApps.count else { return }
-                guard let targetURL = FIFinderSyncController.default().targetedURL() else { return }
-                AppLauncher.shared.launchApp(at: recentApps[index], currentDirectory: targetURL)
+                guard let targetDirectoryURL = currentTargetDirectoryURL() else { return }
+                AppLauncher.shared.launchApp(at: recentApps[index], currentDirectory: targetDirectoryURL)
             }
         }
+    }
+
+    private func currentTargetDirectoryURL() -> URL? {
+        if let targetedURL = FIFinderSyncController.default().targetedURL() {
+            return targetedURL
+        }
+        guard let firstSelectedURL = FIFinderSyncController.default().selectedItemURLs()?.first else {
+            return nil
+        }
+        let values = try? firstSelectedURL.resourceValues(forKeys: [.isDirectoryKey])
+        if values?.isDirectory == true {
+            return firstSelectedURL
+        }
+        return firstSelectedURL.deletingLastPathComponent()
     }
 }

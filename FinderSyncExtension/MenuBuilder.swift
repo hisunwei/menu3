@@ -9,6 +9,8 @@ enum MenuBuilder {
         case copyFilePath = 3
         case copyAllFileNames = 4
         case copyAllFilePaths = 5
+        case saveFilesFromClipboard = 6
+        case saveTextFromClipboard = 7
         case chooseApp = 100
         case recentAppBase = 200
     }
@@ -19,6 +21,7 @@ enum MenuBuilder {
         switch menuKind {
         case .contextualMenuForContainer:
             addItem(to: menu, title: "新建文本文件", tag: .newTextFile, target: target, action: action)
+            addClipboardActions(to: menu, target: target, action: action)
             menu.addItem(.separator())
             menu.addItem(buildOpenAppSubmenu(target: target, action: action))
 
@@ -31,6 +34,7 @@ enum MenuBuilder {
                 addItem(to: menu, title: "复制文件名", tag: .copyFileName, target: target, action: action)
                 addItem(to: menu, title: "复制文件路径", tag: .copyFilePath, target: target, action: action)
             }
+            addClipboardActions(to: menu, target: target, action: action)
             menu.addItem(.separator())
             menu.addItem(buildOpenAppSubmenu(target: target, action: action))
 
@@ -39,6 +43,18 @@ enum MenuBuilder {
         }
 
         return menu
+    }
+
+    private static func addClipboardActions(to menu: NSMenu, target: AnyObject, action: Selector) {
+        let hasClipboardFiles = FileActions.hasFileURLsInClipboard()
+        let hasClipboardText = FileActions.hasTextInClipboard()
+
+        if hasClipboardFiles {
+            addItem(to: menu, title: "保存文件 来自粘贴板", tag: .saveFilesFromClipboard, target: target, action: action)
+        }
+        if hasClipboardText {
+            addItem(to: menu, title: "保存成文本文件", tag: .saveTextFromClipboard, target: target, action: action)
+        }
     }
 
     private static func addItem(to menu: NSMenu, title: String, tag: Tag, target: AnyObject, action: Selector) {

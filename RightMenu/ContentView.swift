@@ -20,6 +20,7 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: 12) {
                 Label("新建文本文件", systemImage: "doc.badge.plus")
                 Label("复制文件名 / 文件路径", systemImage: "doc.on.clipboard")
+                Label("保存文件/文本 来自粘贴板", systemImage: "square.and.arrow.down.on.square")
                 Label("从当前目录打开应用", systemImage: "app.badge.checkmark")
             }
             .font(.body)
