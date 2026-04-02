@@ -1,6 +1,6 @@
-name: RightMenu
+name: menu3
 options:
-  bundleIdPrefix: com.rightmenu
+  bundleIdPrefix: com.menu3
   deploymentTarget:
     macOS: "13.0"
   createIntermediateGroups: true
@@ -17,7 +17,7 @@ settings:
     CODE_SIGN_IDENTITY: "Apple Development"
 
 targets:
-  RightMenu:
+  menu3:
     type: application
     platform: macOS
     sources:
@@ -28,50 +28,20 @@ targets:
     entitlements:
       path: RightMenu/RightMenu.entitlements
       properties:
-        com.apple.security.app-sandbox: true
-        com.apple.security.files.user-selected.read-write: true
+        com.apple.security.app-sandbox: false
     info:
       path: RightMenu/Info.plist
       properties:
         CFBundleDevelopmentRegion: zh_CN
+        CFBundleDisplayName: Menu3
         LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        LSUIElement: true
+        NSAppleEventsUsageDescription: "Menu3 需要与 Finder 通信以获取当前目录和选中文件"
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.rightmenu.app
-        PRODUCT_NAME: RightMenu
-    dependencies:
-      - target: FinderSyncExtension
-        embed: true
-
-  FinderSyncExtension:
-    type: app-extension
-    platform: macOS
-    sources:
-      - path: FinderSyncExtension
-        excludes:
-          - "*.entitlements"
-      - path: Shared
-    entitlements:
-      path: FinderSyncExtension/FinderSyncExtension.entitlements
-      properties:
-        com.apple.security.app-sandbox: true
-        com.apple.security.files.user-selected.read-write: true
-    info:
-      path: FinderSyncExtension/Info.plist
-      properties:
-        CFBundleDevelopmentRegion: zh_CN
-        CFBundleDisplayName: RightMenu
-        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
-        NSExtension:
-          NSExtensionPointIdentifier: com.apple.FinderSync
-          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).FinderSync
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.rightmenu.app.FinderSyncExtension
-        PRODUCT_NAME: FinderSyncExtension
-        LD_RUNPATH_SEARCH_PATHS:
-          - $(inherited)
-          - "@executable_path/../Frameworks"
-          - "@executable_path/../../../../Frameworks"
-    dependencies:
-      - sdk: FinderSync.framework
+        PRODUCT_BUNDLE_IDENTIFIER: com.menu3.app
+        PRODUCT_NAME: Menu3
+        OTHER_LDFLAGS:
+          - "-F/System/Library/PrivateFrameworks"
+          - "-framework"
+          - "MultitouchSupport"
