@@ -9,3 +9,20 @@ DerivedData/
 
 # Build artifacts
 *.dmg
+
+# Build artifacts
+build/
+*.app
+*.app.dSYM
+
+# Derived Data
+DerivedData/
+
+# IDE
+*.xcworkspace/xcuserdata
+*.xcodeproj/xcuserdata
+.DS_Store
+
+# Old extensions (moved to Accessibility API approach)
+FinderSyncExtension/
+QuickAction/

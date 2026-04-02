@@ -27,7 +27,7 @@ final class FinderMonitor {
             DispatchQueue.main.async { self?.setupMonitors() }
         }.store(in: &cancellables)
 
-        NSLog("RightMenu: Monitor started")
+        NSLog("Menu3: Monitor started")
     }
 
     func stop() {
@@ -61,7 +61,7 @@ final class FinderMonitor {
         let cfList = MTDeviceCreateList()
         let count = CFArrayGetCount(cfList)
         guard count > 0 else {
-            NSLog("RightMenu: No multitouch devices found")
+            NSLog("Menu3: No multitouch devices found")
             return
         }
 
@@ -72,7 +72,7 @@ final class FinderMonitor {
             MTDeviceStart(device, 0)
             mtDevices.append(device)
         }
-        NSLog("RightMenu: Registered multitouch on %d devices", mtDevices.count)
+        NSLog("Menu3: Registered multitouch on %d devices", mtDevices.count)
     }
 
     private func stopMultitouchDevices() {

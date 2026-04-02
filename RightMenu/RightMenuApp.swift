@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct RightMenuApp: App {
+struct Menu3App: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {

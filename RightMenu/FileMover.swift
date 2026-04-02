@@ -78,7 +78,7 @@ final class FileMover {
                 }
             } catch {
                 errors.append("\(sourceURL.lastPathComponent): \(error.localizedDescription)")
-                NSLog("RightMenu: %@ failed: %@",
+                NSLog("Menu3: %@ failed: %@",
                       op == .copy ? "Copy" : "Move",
                       error.localizedDescription)
             }

@@ -1,6 +1,6 @@
 import Cocoa
 
-/// Builds and displays the RightMenu popup menu at the given screen location.
+/// Builds and displays the Menu3 popup menu at the given screen location.
 final class MenuPresenter {
     static let shared = MenuPresenter()
 
@@ -10,7 +10,7 @@ final class MenuPresenter {
         let directoryURL = bridge.currentDirectoryURL()
 
         guard directoryURL != nil || !selectedURLs.isEmpty else {
-            NSLog("RightMenu: no directory or selection found")
+            NSLog("Menu3: no directory or selection found")
             return
         }
 

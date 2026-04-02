@@ -1,6 +1,6 @@
 import Foundation
 
-/// Persistent settings for which triggers activate RightMenu.
+/// Persistent settings for which triggers activate Menu3.
 final class TriggerSettings: ObservableObject {
     static let shared = TriggerSettings()
 
