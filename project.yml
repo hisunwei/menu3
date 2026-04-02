@@ -21,16 +21,16 @@ targets:
     type: application
     platform: macOS
     sources:
-      - path: RightMenu
+      - path: Menu3
         excludes:
           - "*.entitlements"
       - path: Shared
     entitlements:
-      path: RightMenu/RightMenu.entitlements
+      path: Menu3/Menu3.entitlements
       properties:
         com.apple.security.app-sandbox: false
     info:
-      path: RightMenu/Info.plist
+      path: Menu3/Info.plist
       properties:
         CFBundleDevelopmentRegion: zh_CN
         CFBundleDisplayName: Menu3
