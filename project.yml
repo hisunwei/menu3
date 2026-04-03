@@ -41,6 +41,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.menu3.app
         PRODUCT_NAME: Menu3
+        ONLY_ACTIVE_ARCH: NO
         OTHER_LDFLAGS:
           - "-F/System/Library/PrivateFrameworks"
           - "-framework"

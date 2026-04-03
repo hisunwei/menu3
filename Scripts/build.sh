@@ -4,10 +4,10 @@ set -e
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$PROJECT_DIR"
 
-echo "=== Building RightMenu (Universal Binary) ==="
+echo "=== Building Menu3 (Universal Binary: arm64 + x86_64) ==="
 xcodebuild \
-    -project RightMenu.xcodeproj \
-    -scheme RightMenu \
+    -project menu3.xcodeproj \
+    -scheme menu3 \
     -configuration Release \
     -arch arm64 -arch x86_64 \
     ONLY_ACTIVE_ARCH=NO \
@@ -16,4 +16,4 @@ xcodebuild \
 
 echo ""
 echo "✅ Build complete!"
-echo "Output: $PROJECT_DIR/build/Build/Products/Release/RightMenu.app"
+echo "Output: $PROJECT_DIR/build/Build/Products/Release/Menu3.app"
