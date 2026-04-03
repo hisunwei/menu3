@@ -1,4 +1,4 @@
-# Menu3（Finder 右键菜单增强）
+# Menu3（Finder 菜单增强）
 
 macOS Finder 上下文菜单增强工具，支持触摸板手势触发和文件快捷操作。
 
