@@ -91,7 +91,7 @@ bash Scripts/prepare-test-data.sh
 - **架构**：基于 macOS Accessibility API 的菜单栏常驻应用
 - **触摸板检测**：MultitouchSupport.framework 私有 API
 - **Finder 通信**：AppleScript 与 Finder 交互
-- **系统支持**：macOS 13.0+
+- **系统支持**：macOS 12.0+
 - **权限**：Accessibility（需要用户授予）
 
 ## 边界与已知问题
