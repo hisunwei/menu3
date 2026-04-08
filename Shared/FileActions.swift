@@ -4,32 +4,34 @@ enum FileActions {
 
     // MARK: - Hidden Files Toggle
 
+    /// Read via CFPreferences (no permission required).
     static var isShowingHiddenFiles: Bool {
-        let script = """
-        tell application "Finder"
-            tell preferences
-                get shows hidden files
-            end tell
-        end tell
-        """
-        var error: NSDictionary?
-        guard let appleScript = NSAppleScript(source: script) else { return false }
-        let result = appleScript.executeAndReturnError(&error)
-        guard error == nil else { return false }
-        return result.booleanValue
+        CFPreferencesSynchronize("com.apple.finder" as CFString, kCFPreferencesAnyUser, kCFPreferencesCurrentHost)
+        let value = CFPreferencesCopyAppValue("AppleShowAllFiles" as CFString, "com.apple.finder" as CFString)
+        if let num = value as? NSNumber { return num.boolValue }
+        if let str = value as? String { return ["1", "true", "yes"].contains(str.lowercased()) }
+        return false
     }
 
+    /// Toggle via osascript — Finder updates in-place without restarting.
+    /// macOS will show the Automation permission prompt if not yet granted.
     static func toggleHiddenFiles() {
-        let script = """
-        tell application "Finder"
-            tell preferences
-                set shows hidden files to not (shows hidden files)
-            end tell
-        end tell
-        """
-        var error: NSDictionary?
-        if let appleScript = NSAppleScript(source: script) {
-            appleScript.executeAndReturnError(&error)
+        let newValue = !isShowingHiddenFiles
+        let script = "tell application \"Finder\" to tell preferences to set shows hidden files to \(newValue)"
+        let proc = Process()
+        proc.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+        proc.arguments = ["-e", script]
+        let errPipe = Pipe()
+        proc.standardError = errPipe
+        do {
+            try proc.run()
+            proc.waitUntilExit()
+            if proc.terminationStatus != 0 {
+                let msg = String(data: errPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                NSLog("Menu3: toggleHiddenFiles AppleScript error: %@", msg)
+            }
+        } catch {
+            NSLog("Menu3: toggleHiddenFiles failed to launch osascript: %@", error.localizedDescription)
         }
     }
 
