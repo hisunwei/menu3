@@ -4,34 +4,44 @@ enum FileActions {
 
     // MARK: - Hidden Files Toggle
 
-    /// Read via CFPreferences (no permission required).
+    /// Checks whether Finder is currently showing hidden files.
     static var isShowingHiddenFiles: Bool {
-        CFPreferencesSynchronize("com.apple.finder" as CFString, kCFPreferencesAnyUser, kCFPreferencesCurrentHost)
+        CFPreferencesAppSynchronize("com.apple.finder" as CFString)
         let value = CFPreferencesCopyAppValue("AppleShowAllFiles" as CFString, "com.apple.finder" as CFString)
         if let num = value as? NSNumber { return num.boolValue }
         if let str = value as? String { return ["1", "true", "yes"].contains(str.lowercased()) }
         return false
     }
 
-    /// Toggle via osascript — Finder updates in-place without restarting.
-    /// macOS will show the Automation permission prompt if not yet granted.
+    /// Simulates Cmd+Shift+. (the native Finder shortcut) via CGEvent.
+    /// Requires accessibility permission (which Menu3 already has).
+    /// Finder handles the event in-place — no restart, no window re-open.
     static func toggleHiddenFiles() {
-        let newValue = !isShowingHiddenFiles
-        let script = "tell application \"Finder\" to tell preferences to set shows hidden files to \(newValue)"
-        let proc = Process()
-        proc.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-        proc.arguments = ["-e", script]
-        let errPipe = Pipe()
-        proc.standardError = errPipe
-        do {
-            try proc.run()
-            proc.waitUntilExit()
-            if proc.terminationStatus != 0 {
-                let msg = String(data: errPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-                NSLog("Menu3: toggleHiddenFiles AppleScript error: %@", msg)
+        guard let finderApp = NSRunningApplication.runningApplications(
+            withBundleIdentifier: "com.apple.finder"
+        ).first else {
+            NSLog("Menu3: Finder not running")
+            return
+        }
+
+        // Bring Finder to front briefly so it receives the keystroke
+        finderApp.activate(options: [])
+        // Small delay to let Finder become key
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            let keyCode: CGKeyCode = 47  // period (.)
+            let flags: CGEventFlags = [.maskCommand, .maskShift]
+
+            let src = CGEventSource(stateID: .combinedSessionState)
+            guard let keyDown = CGEvent(keyboardEventSource: src, virtualKey: keyCode, keyDown: true),
+                  let keyUp   = CGEvent(keyboardEventSource: src, virtualKey: keyCode, keyDown: false)
+            else {
+                NSLog("Menu3: failed to create CGEvent for toggle hidden files")
+                return
             }
-        } catch {
-            NSLog("Menu3: toggleHiddenFiles failed to launch osascript: %@", error.localizedDescription)
+            keyDown.flags = flags
+            keyUp.flags = flags
+            keyDown.post(tap: .cghidEventTap)
+            keyUp.post(tap: .cghidEventTap)
         }
     }
 
