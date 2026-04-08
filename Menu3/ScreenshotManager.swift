@@ -1,7 +1,7 @@
 import Cocoa
 import Combine
 
-/// Manages screen recording permission and triggers interactive screenshot capture.
+/// Manages screen recording permission and triggers the custom screenshot overlay.
 final class ScreenshotManager: ObservableObject {
     static let shared = ScreenshotManager()
 
@@ -17,6 +17,7 @@ final class ScreenshotManager: ObservableObject {
     }
 
     @Published var permissionStatus: PermissionStatus = .denied
+    private var session: ScreenshotSession?
 
     private init() {
         refreshPermissionStatus()
@@ -30,8 +31,7 @@ final class ScreenshotManager: ObservableObject {
         if #available(macOS 14.0, *) {
             return CGPreflightScreenCaptureAccess()
         } else {
-            // On macOS 12/13: attempt to read a 1×1 pixel from on-screen content.
-            // Returns nil (or a blank placeholder) when permission is denied.
+            // On macOS 12/13: a successful capture (non-nil, non-zero-width) means permission is granted.
             guard let image = CGWindowListCreateImage(
                 CGRect(x: 0, y: 0, width: 1, height: 1),
                 .optionOnScreenOnly,
@@ -52,20 +52,18 @@ final class ScreenshotManager: ObservableObject {
         )
     }
 
-    /// Launches an interactive screenshot session (user draws a selection rectangle).
-    /// The result is saved to ~/Downloads with a timestamp-based name.
+    /// Launches the custom WeChat-style screenshot overlay.
     func takeInteractiveScreenshot() {
-        let downloadsURL = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first
-            ?? URL(fileURLWithPath: NSHomeDirectory())
-
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH.mm.ss"
-        let filename = "截图 \(formatter.string(from: Date())).png"
-        let outputURL = downloadsURL.appendingPathComponent(filename)
-
-        let proc = Process()
-        proc.executableURL = URL(fileURLWithPath: "/usr/sbin/screencapture")
-        proc.arguments = ["-i", outputURL.path]
-        try? proc.run()
+        guard session == nil else { return } // Prevent double-launch
+        refreshPermissionStatus()
+        guard permissionStatus == .granted else {
+            Self.requestPermission()
+            return
+        }
+        let s = ScreenshotSession()
+        session = s
+        s.onFinished = { [weak self] in self?.session = nil }
+        s.start()
     }
 }
+

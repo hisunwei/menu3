@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2565A22EA923B3F22FAAF4EA /* ScreenshotOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7120E555ABECCEA87FBC4F5 /* ScreenshotOverlay.swift */; };
 		27E9D6F85EB9860681EA8A00 /* AppLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278FD8ABDF9B32ADB6BC098B /* AppLauncher.swift */; };
 		3CB352D89DA2AE5BD62F0DB4 /* Menu3App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22021D10BF90F928E6922897 /* Menu3App.swift */; };
 		44478ED498C2252F9E10D958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F3509076AC927139CCE17E7E /* Assets.xcassets */; };
@@ -34,6 +35,7 @@
 		8DDD3DDE3B312A9200617A02 /* ScreenshotManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotManager.swift; sourceTree = "<group>"; };
 		900132E63EE3525909686AB1 /* FinderBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderBridge.swift; sourceTree = "<group>"; };
 		A47F7A001F7FB2262A0C4DEA /* menu3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = menu3.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7120E555ABECCEA87FBC4F5 /* ScreenshotOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotOverlay.swift; sourceTree = "<group>"; };
 		AD1B72ECCFBA8D32BD32C40A /* FinderMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderMonitor.swift; sourceTree = "<group>"; };
 		CB7F6475954C992B0D5B7975 /* MultitouchPrivate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultitouchPrivate.swift; sourceTree = "<group>"; };
 		DBEBC46A73E65F1C64CF8A51 /* MenuPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuPresenter.swift; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 				DBEBC46A73E65F1C64CF8A51 /* MenuPresenter.swift */,
 				CB7F6475954C992B0D5B7975 /* MultitouchPrivate.swift */,
 				8DDD3DDE3B312A9200617A02 /* ScreenshotManager.swift */,
+				A7120E555ABECCEA87FBC4F5 /* ScreenshotOverlay.swift */,
 				71C85086C106980BD2F0261A /* TriggerSettings.swift */,
 			);
 			path = Menu3;
@@ -172,6 +175,7 @@
 				49F066DB82917A5996019916 /* MultitouchPrivate.swift in Sources */,
 				55FC694C2B5B205B160D729B /* RecentAppsManager.swift in Sources */,
 				535EA56D3B6AA81F04BF4924 /* ScreenshotManager.swift in Sources */,
+				2565A22EA923B3F22FAAF4EA /* ScreenshotOverlay.swift in Sources */,
 				713997550005CC56804A702F /* TriggerSettings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
