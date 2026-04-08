@@ -12,6 +12,7 @@ final class TriggerSettings: ObservableObject {
         case threeFingerPress = "trigger.threeFingerPress"
         case optionThreeFingerTap = "trigger.optionThreeFingerTap"
         case optionThreeFingerPress = "trigger.optionThreeFingerPress"
+        case screenshotEnabled = "feature.screenshotEnabled"
     }
 
     @Published var middleClick: Bool {
@@ -34,6 +35,12 @@ final class TriggerSettings: ObservableObject {
         didSet { defaults.set(optionThreeFingerPress, forKey: Key.optionThreeFingerPress.rawValue) }
     }
 
+    @Published var screenshotEnabled: Bool {
+        didSet {
+            defaults.set(screenshotEnabled, forKey: Key.screenshotEnabled.rawValue)
+        }
+    }
+
     private init() {
         let d = UserDefaults.standard
         // Defaults: middle click + three-finger tap ON
@@ -49,5 +56,6 @@ final class TriggerSettings: ObservableObject {
         threeFingerPress = d.bool(forKey: Key.threeFingerPress.rawValue)
         optionThreeFingerTap = d.bool(forKey: Key.optionThreeFingerTap.rawValue)
         optionThreeFingerPress = d.bool(forKey: Key.optionThreeFingerPress.rawValue)
+        screenshotEnabled = d.bool(forKey: Key.screenshotEnabled.rawValue)
     }
 }

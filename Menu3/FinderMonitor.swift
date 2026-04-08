@@ -47,11 +47,38 @@ final class FinderMonitor {
             if let m { monitors.append(m) }
         }
 
+        // cmd+shift+a global screenshot shortcut (keyCode 0 = 'A')
+        if settings.screenshotEnabled {
+            let targetFlags: NSEvent.ModifierFlags = [.command, .shift]
+            let globalHotkey = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
+                guard event.keyCode == 0,
+                      event.modifierFlags.intersection([.command, .shift, .control, .option]) == targetFlags
+                else { return }
+                self?.handleScreenshotHotkey()
+            }
+            if let globalHotkey { monitors.append(globalHotkey) }
+
+            let localHotkey = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+                guard event.keyCode == 0,
+                      event.modifierFlags.intersection([.command, .shift, .control, .option]) == targetFlags
+                else { return event }
+                self?.handleScreenshotHotkey()
+                return nil
+            }
+            if let localHotkey { monitors.append(localHotkey) }
+        }
+
         // Three-finger gestures via MultitouchSupport private API
         let needsMultitouch = settings.threeFingerTap || settings.threeFingerPress
             || settings.optionThreeFingerTap || settings.optionThreeFingerPress
         if needsMultitouch {
             startMultitouchDevices()
+        }
+    }
+
+    private func handleScreenshotHotkey() {
+        DispatchQueue.main.async {
+            ScreenshotManager.shared.takeInteractiveScreenshot()
         }
     }
 

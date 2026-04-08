@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject private var settings = TriggerSettings.shared
+    @ObservedObject private var screenshotMgr = ScreenshotManager.shared
     @State private var hasAccessibility = FinderMonitor.hasAccessibilityPermission
 
     var body: some View {
@@ -101,6 +102,60 @@ struct ContentView: View {
 
             Divider()
 
+            // Screenshot feature
+            VStack(alignment: .leading, spacing: 16) {
+                Text("截图功能")
+                    .font(.headline)
+
+                Text("按下 ⌘⇧A 可触发交互式截图，自由选取屏幕区域后保存至「下载」文件夹。默认关闭，开启后需要屏幕录制权限。")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Toggle(isOn: $settings.screenshotEnabled) {
+                    VStack(alignment: .leading) {
+                        Text("📷 启用 ⌘⇧A 截图快捷键")
+                        Text("开启后全局监听 Command+Shift+A")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .onChange(of: settings.screenshotEnabled) { enabled in
+                    if enabled {
+                        screenshotMgr.refreshPermissionStatus()
+                        if screenshotMgr.permissionStatus == .denied {
+                            ScreenshotManager.requestPermission()
+                        }
+                    }
+                }
+
+                // Permission status
+                GroupBox {
+                    HStack {
+                        if screenshotMgr.permissionStatus == .granted {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                            Text(screenshotMgr.permissionStatus.displayText)
+                        } else {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.orange)
+                            Text(screenshotMgr.permissionStatus.displayText)
+                            Spacer()
+                            Button("授权") {
+                                ScreenshotManager.requestPermission()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    screenshotMgr.refreshPermissionStatus()
+                                }
+                            }
+                        }
+                        Spacer()
+                    }
+                    .padding(4)
+                }
+            }
+
+            Divider()
+
             // Feature list
             VStack(alignment: .leading, spacing: 8) {
                 Text("功能列表")
@@ -110,14 +165,16 @@ struct ContentView: View {
                 Label("复制 / 移动文件到其他目录", systemImage: "arrow.right.doc.on.clipboard")
                 Label("保存文件/文本 来自粘贴板", systemImage: "square.and.arrow.down.on.square")
                 Label("从当前目录打开应用", systemImage: "app.badge.checkmark")
+                Label("显示 / 隐藏隐藏文件", systemImage: "eye")
+                Label("⌘⇧A 交互式截图（可选）", systemImage: "camera.viewfinder")
             }
             .font(.callout)
         }
         .padding(30)
         .frame(width: 400)
         .onAppear {
-            // Refresh accessibility status
             hasAccessibility = FinderMonitor.hasAccessibilityPermission
+            screenshotMgr.refreshPermissionStatus()
         }
     }
 }

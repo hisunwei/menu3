@@ -37,6 +37,7 @@ targets:
         LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
         LSUIElement: true
         NSAppleEventsUsageDescription: "Menu3 需要与 Finder 通信以获取当前目录和选中文件"
+        NSScreenCaptureUsageDescription: "Menu3 需要屏幕录制权限以支持 ⌘⇧A 截图功能"
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.menu3.app

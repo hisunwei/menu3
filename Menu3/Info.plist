@@ -26,5 +26,7 @@
 	<true/>
 	<key>NSAppleEventsUsageDescription</key>
 	<string>Menu3 需要与 Finder 通信以获取当前目录和选中文件</string>
+	<key>NSScreenCaptureUsageDescription</key>
+	<string>Menu3 需要屏幕录制权限以支持 ⌘⇧A 截图功能</string>
 </dict>
 </plist>

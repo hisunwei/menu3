@@ -53,6 +53,15 @@ final class MenuPresenter {
             menu.addItem(.separator())
         }
 
+        // Toggle hidden files
+        let isShowingHidden = FileActions.isShowingHiddenFiles
+        let hiddenTitle = isShowingHidden ? "隐藏隐藏文件" : "显示隐藏文件"
+        let hiddenImage = NSImage(systemSymbolName: isShowingHidden ? "eye.slash" : "eye", accessibilityDescription: nil)
+        addItem(to: menu, title: hiddenTitle, image: hiddenImage, action: {
+            FileActions.toggleHiddenFiles()
+        })
+        menu.addItem(.separator())
+
         // Directory-based actions
         if let dir = targetDirectory {
             addItem(to: menu, title: "新建文本文件", action: { FileActions.createNewTextFile(in: dir) })

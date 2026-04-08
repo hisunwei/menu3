@@ -2,6 +2,33 @@ import Cocoa
 
 enum FileActions {
 
+    // MARK: - Hidden Files Toggle
+
+    static var isShowingHiddenFiles: Bool {
+        let value = CFPreferencesCopyAppValue("AppleShowAllFiles" as CFString, "com.apple.finder" as CFString)
+        if let bool = value as? Bool { return bool }
+        if let str = value as? String {
+            let lower = str.lowercased()
+            return lower == "true" || lower == "1" || lower == "yes"
+        }
+        return false
+    }
+
+    static func toggleHiddenFiles() {
+        let newValue = !isShowingHiddenFiles
+
+        let writeProc = Process()
+        writeProc.executableURL = URL(fileURLWithPath: "/usr/bin/defaults")
+        writeProc.arguments = ["write", "com.apple.finder", "AppleShowAllFiles", "-bool", newValue ? "true" : "false"]
+        try? writeProc.run()
+        writeProc.waitUntilExit()
+
+        let killProc = Process()
+        killProc.executableURL = URL(fileURLWithPath: "/usr/bin/killall")
+        killProc.arguments = ["Finder"]
+        try? killProc.run()
+    }
+
     static func createNewTextFile(in directoryURL: URL) {
         let fileURL = nextUntitledTextFileURL(in: directoryURL)
         let created = FileManager.default.createFile(atPath: fileURL.path, contents: nil)
