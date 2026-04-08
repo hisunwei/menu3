@@ -18,14 +18,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Hide dock icon — menu bar only
         NSApp.setActivationPolicy(.accessory)
 
-        // Create status bar item with the app icon
+        // Create status bar item with the app icon (template = transparent background)
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusItem.button {
             if let img = NSImage(named: "StatusBarIcon") {
                 img.size = NSSize(width: 18, height: 18)
+                img.isTemplate = true
                 button.image = img
             } else if let appIcon = NSImage(named: "AppIcon") {
                 appIcon.size = NSSize(width: 18, height: 18)
+                appIcon.isTemplate = true
                 button.image = appIcon
             } else {
                 button.title = "M3"
@@ -57,11 +59,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(.separator())
 
         // Accessibility status
-        let accText = FinderMonitor.hasAccessibilityPermission
-            ? "✅ 辅助功能已授权"
-            : "⚠️ 需要辅助功能权限"
-        let accItem = NSMenuItem(title: accText, action: nil, keyEquivalent: "")
+        let hasAcc = FinderMonitor.hasAccessibilityPermission
+        let accItem = NSMenuItem(title: hasAcc ? "辅助功能已授权" : "辅助功能未授权", action: nil, keyEquivalent: "")
         accItem.isEnabled = false
+        if hasAcc {
+            accItem.image = menuStatusImage(systemName: "checkmark.circle.fill", color: .systemGreen)
+        } else {
+            accItem.image = menuStatusImage(systemName: "exclamationmark.circle.fill", color: .systemOrange)
+        }
         menu.addItem(accItem)
 
         if !FinderMonitor.hasAccessibilityPermission {
@@ -70,9 +75,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Screenshot status
         let screenshotEnabled = TriggerSettings.shared.screenshotEnabled
-        let ssText = screenshotEnabled ? "✅ 截图功能已开启" : "⚫ 截图功能未开启"
-        let ssItem = NSMenuItem(title: ssText, action: nil, keyEquivalent: "")
+        let ssItem = NSMenuItem(title: screenshotEnabled ? "截图功能已开启" : "截图功能未开启", action: nil, keyEquivalent: "")
         ssItem.isEnabled = false
+        ssItem.image = menuStatusImage(
+            systemName: screenshotEnabled ? "camera.fill" : "camera",
+            color: screenshotEnabled ? .systemGreen : .secondaryLabelColor
+        )
         menu.addItem(ssItem)
 
         menu.addItem(.separator())
@@ -87,6 +95,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         DispatchQueue.main.async {
             MenuPresenter.shared.show(at: screenPoint)
         }
+    }
+
+    /// Creates a 14pt SF Symbol image tinted with the given color for use as a menu item icon.
+    private func menuStatusImage(systemName: String, color: NSColor) -> NSImage? {
+        let cfg = NSImage.SymbolConfiguration(pointSize: 13, weight: .regular)
+        guard let sym = NSImage(systemSymbolName: systemName, accessibilityDescription: nil)?
+            .withSymbolConfiguration(cfg) else { return nil }
+        let size = NSSize(width: 16, height: 16)
+        let tinted = NSImage(size: size, flipped: false) { _ in
+            color.setFill()
+            NSBezierPath(rect: NSRect(origin: .zero, size: size)).fill()
+            sym.draw(in: NSRect(origin: .zero, size: size),
+                     from: .zero, operation: .destinationIn, fraction: 1)
+            return true
+        }
+        return tinted
     }
 
     @objc private func openSettings() {

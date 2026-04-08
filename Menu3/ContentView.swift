@@ -182,11 +182,11 @@ struct ContentView: View {
                             if screenshotMgr.permissionStatus == .granted {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundColor(.green)
-                                Text(screenshotMgr.permissionStatus.displayText)
+                                Text("屏幕录制已授权")
                             } else {
                                 Image(systemName: "exclamationmark.triangle.fill")
                                     .foregroundColor(.orange)
-                                Text(screenshotMgr.permissionStatus.displayText)
+                                Text("需要屏幕录制权限")
                                 Spacer()
                                 Button("授权") {
                                     ScreenshotManager.requestPermission()
