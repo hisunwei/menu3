@@ -605,7 +605,8 @@ private final class AnnotationToolbar: NSView {
 
         // --- Undo, separators, action buttons ---
         let undoBtn   = makeIconBtn(icon: "arrow.uturn.backward", action: #selector(doUndo))
-        let copyBtn   = makeTextBtn(title: "复制", icon: "doc.on.clipboard",    action: #selector(doCopy))
+        let confirmBtn = makeIconBtn(icon: "checkmark", action: #selector(doCopy))
+        confirmBtn.contentTintColor = NSColor.systemGreen
         let saveBtn   = makeTextBtn(title: "保存", icon: "square.and.arrow.down", action: #selector(doSave))
         let cancelBtn = makeIconBtn(icon: "xmark", action: #selector(doCancel))
         cancelBtn.contentTintColor = NSColor(white: 0.7, alpha: 1)
@@ -616,7 +617,7 @@ private final class AnnotationToolbar: NSView {
         allViews += colorViews
         allViews += [sep2]
         allViews += sizeViews
-        allViews += [sep3, undoBtn, sep4, copyBtn, saveBtn, cancelBtn]
+        allViews += [sep3, undoBtn, sep4, cancelBtn, saveBtn, confirmBtn]
 
         let stack = NSStackView(views: allViews)
         stack.orientation = .horizontal
