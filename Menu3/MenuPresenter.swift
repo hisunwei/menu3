@@ -21,24 +21,32 @@ final class MenuPresenter {
 
         // Copy name/path actions
         if !selectedURLs.isEmpty {
-            let label = selectedURLs.count > 1 ? "复制所有文件名" : "复制文件名"
-            let labelPath = selectedURLs.count > 1 ? "复制所有文件路径" : "复制文件路径"
+            let label = selectedURLs.count > 1 ? L("复制所有文件名") : L("复制文件名")
+            let labelPath = selectedURLs.count > 1 ? L("复制所有文件路径") : L("复制文件路径")
             addItem(to: menu, title: label, action: { FileActions.copyFileNames(from: selectedURLs) })
             addItem(to: menu, title: labelPath, action: { FileActions.copyFilePaths(from: selectedURLs) })
             menu.addItem(.separator())
 
             // Copy/Move staging
-            let countLabel = selectedURLs.count > 1 ? " \(selectedURLs.count) 个项目" : " \"\(selectedURLs[0].lastPathComponent)\""
-            addItem(to: menu, title: "复制\(countLabel)", image: NSImage(systemSymbolName: "doc.on.doc", accessibilityDescription: nil), action: {
+            let copyTitle: String
+            let moveTitle: String
+            if selectedURLs.count > 1 {
+                copyTitle = LF("复制 %d 个项目", selectedURLs.count)
+                moveTitle = LF("移动 %d 个项目", selectedURLs.count)
+            } else {
+                copyTitle = LF("复制 \"%@\"", selectedURLs[0].lastPathComponent)
+                moveTitle = LF("移动 \"%@\"", selectedURLs[0].lastPathComponent)
+            }
+            addItem(to: menu, title: copyTitle, image: NSImage(systemSymbolName: "doc.on.doc", accessibilityDescription: nil), action: {
                 mover.stage(urls: selectedURLs, operation: .copy)
             })
-            addItem(to: menu, title: "移动\(countLabel)", image: NSImage(systemSymbolName: "arrow.right.doc.on.clipboard", accessibilityDescription: nil), action: {
+            addItem(to: menu, title: moveTitle, image: NSImage(systemSymbolName: "arrow.right.doc.on.clipboard", accessibilityDescription: nil), action: {
                 mover.stage(urls: selectedURLs, operation: .move)
             })
             menu.addItem(.separator())
         } else if let dir = targetDirectory {
-            addItem(to: menu, title: "复制目录名", action: { FileActions.copyFileNames(from: [dir]) })
-            addItem(to: menu, title: "复制目录路径", action: { FileActions.copyFilePaths(from: [dir]) })
+            addItem(to: menu, title: L("复制目录名"), action: { FileActions.copyFileNames(from: [dir]) })
+            addItem(to: menu, title: L("复制目录路径"), action: { FileActions.copyFilePaths(from: [dir]) })
             menu.addItem(.separator())
         }
 
@@ -47,7 +55,7 @@ final class MenuPresenter {
             addItem(to: menu, title: mover.pendingDescription, image: NSImage(systemSymbolName: "square.and.arrow.down", accessibilityDescription: nil), action: {
                 mover.execute(to: dir)
             })
-            addItem(to: menu, title: "取消\(mover.operation == .copy ? "复制" : "移动")", action: {
+            addItem(to: menu, title: mover.operation == .copy ? L("取消复制") : L("取消移动"), action: {
                 mover.clear()
             })
             menu.addItem(.separator())
@@ -55,7 +63,7 @@ final class MenuPresenter {
 
         // Toggle hidden files
         let isShowingHidden = FileActions.isShowingHiddenFiles
-        let hiddenTitle = isShowingHidden ? "隐藏隐藏文件" : "显示隐藏文件"
+        let hiddenTitle = isShowingHidden ? L("隐藏隐藏文件") : L("显示隐藏文件")
         let hiddenImage = NSImage(systemSymbolName: isShowingHidden ? "eye.slash" : "eye", accessibilityDescription: nil)
         addItem(to: menu, title: hiddenTitle, image: hiddenImage, action: {
             FileActions.toggleHiddenFiles()
@@ -64,20 +72,21 @@ final class MenuPresenter {
 
         // Directory-based actions
         if let dir = targetDirectory {
-            addItem(to: menu, title: "新建文本文件", action: { FileActions.createNewTextFile(in: dir) })
+            addItem(to: menu, title: L("新建文件夹"), action: { FileActions.createNewFolder(in: dir) })
+            addItem(to: menu, title: L("新建文本文件"), action: { FileActions.createNewTextFile(in: dir) })
 
             if FileActions.hasFileURLsInClipboard() {
-                addItem(to: menu, title: "保存文件 来自粘贴板", action: { FileActions.saveFilesFromClipboard(to: dir) })
+                addItem(to: menu, title: L("保存文件 来自粘贴板"), action: { FileActions.saveFilesFromClipboard(to: dir) })
             }
             if FileActions.hasTextInClipboard() {
-                addItem(to: menu, title: "保存成文本文件", action: { FileActions.saveTextFromClipboard(to: dir) })
+                addItem(to: menu, title: L("保存成文本文件"), action: { FileActions.saveTextFromClipboard(to: dir) })
             }
 
             menu.addItem(.separator())
 
             // Open in App submenu
-            let submenuItem = NSMenuItem(title: "在此打开应用", action: nil, keyEquivalent: "")
-            let submenu = NSMenu(title: "在此打开应用")
+            let submenuItem = NSMenuItem(title: L("在此打开应用"), action: nil, keyEquivalent: "")
+            let submenu = NSMenu(title: L("在此打开应用"))
 
             let recentApps = AppLauncher.shared.recentApps
             for appURL in recentApps {
@@ -91,11 +100,18 @@ final class MenuPresenter {
             if !recentApps.isEmpty {
                 submenu.addItem(.separator())
             }
-            addItem(to: submenu, title: "选择应用…", action: {
+            addItem(to: submenu, title: L("选择应用…"), action: {
                 AppLauncher.shared.chooseAndLaunchApp(currentDirectory: dir)
             })
             submenuItem.submenu = submenu
             menu.addItem(submenuItem)
+
+            // Go to folder submenu (shows the same right-side ">" indicator)
+            let goToFolderItem = NSMenuItem(title: L("前往文件夹"), action: nil, keyEquivalent: "")
+            let goToFolderSubmenu = NSMenu(title: L("前往文件夹"))
+            addItem(to: goToFolderSubmenu, title: L("输入路径…"), action: { FileActions.promptAndGoToFolder() })
+            goToFolderItem.submenu = goToFolderSubmenu
+            menu.addItem(goToFolderItem)
         }
 
         menu.popUp(positioning: nil, at: screenPoint, in: nil)

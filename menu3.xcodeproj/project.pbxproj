@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0909E7E309D51C28861DB850 /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D52A2A04E33C49325F446D /* LaunchAtLoginManager.swift */; };
 		2565A22EA923B3F22FAAF4EA /* ScreenshotOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7120E555ABECCEA87FBC4F5 /* ScreenshotOverlay.swift */; };
 		27E9D6F85EB9860681EA8A00 /* AppLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278FD8ABDF9B32ADB6BC098B /* AppLauncher.swift */; };
 		3CB352D89DA2AE5BD62F0DB4 /* Menu3App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22021D10BF90F928E6922897 /* Menu3App.swift */; };
@@ -16,25 +17,38 @@
 		55FC694C2B5B205B160D729B /* RecentAppsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129D8DCE5B343A630023FFC /* RecentAppsManager.swift */; };
 		607FB97368A176BF586EBA1A /* FileActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B460F0AF07BD82A32AA6F83 /* FileActions.swift */; };
 		6BEB160E9C7C6B329F64B53E /* FinderMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1B72ECCFBA8D32BD32C40A /* FinderMonitor.swift */; };
+		6DCB1BD489979C7D3EF0473F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9C46A161087A49CD5400678F /* Localizable.strings */; };
 		713997550005CC56804A702F /* TriggerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C85086C106980BD2F0261A /* TriggerSettings.swift */; };
 		7164628D72A4CF2B3DEACA52 /* FinderBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900132E63EE3525909686AB1 /* FinderBridge.swift */; };
 		8586A724C8897443E7215F00 /* FileMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0E18FD946AF2CC08C21FBB /* FileMover.swift */; };
 		A4AA09E2672C544C69A3D60F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B3F88DEF6744AD31FD82DA /* Constants.swift */; };
 		BB6DB8355917661E93A37976 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DB363709919BEE72EC91A0 /* ContentView.swift */; };
+		D54F21BDA77EE49F00A94C17 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52247AC8746B60618BC2AF1 /* Localization.swift */; };
 		D5815EFB5DEBB48E2324AEF8 /* MenuPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEBC46A73E65F1C64CF8A51 /* MenuPresenter.swift */; };
+		E5AC38000C85A12E8A0388BD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A35A33369E830B9C3911B68E /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0129D8DCE5B343A630023FFC /* RecentAppsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentAppsManager.swift; sourceTree = "<group>"; };
+		1AA8D9CDFE634B5D3DB95A37 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		22021D10BF90F928E6922897 /* Menu3App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu3App.swift; sourceTree = "<group>"; };
 		278FD8ABDF9B32ADB6BC098B /* AppLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLauncher.swift; sourceTree = "<group>"; };
+		27D52A2A04E33C49325F446D /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
 		2B460F0AF07BD82A32AA6F83 /* FileActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileActions.swift; sourceTree = "<group>"; };
+		2FA911CDD4D9CAC2FDD59AC7 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		346A04A55C9D82974F4ACB4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		434A1D79C51DE833F4A111E8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		57B3F88DEF6744AD31FD82DA /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		59250532E827646A4A6884D0 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		59A0BD4655972EFB693E22F4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		5CDD89D89EEEB796F40C06FC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		6324C8F68E90F545D1FA49FD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		71C85086C106980BD2F0261A /* TriggerSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerSettings.swift; sourceTree = "<group>"; };
 		8DDD3DDE3B312A9200617A02 /* ScreenshotManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotManager.swift; sourceTree = "<group>"; };
 		900132E63EE3525909686AB1 /* FinderBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderBridge.swift; sourceTree = "<group>"; };
+		92FBAD87C88327B0DB2B0DD7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A47F7A001F7FB2262A0C4DEA /* menu3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = menu3.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A52247AC8746B60618BC2AF1 /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		A7120E555ABECCEA87FBC4F5 /* ScreenshotOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotOverlay.swift; sourceTree = "<group>"; };
 		AD1B72ECCFBA8D32BD32C40A /* FinderMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderMonitor.swift; sourceTree = "<group>"; };
 		CB7F6475954C992B0D5B7975 /* MultitouchPrivate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultitouchPrivate.swift; sourceTree = "<group>"; };
@@ -54,6 +68,9 @@
 				900132E63EE3525909686AB1 /* FinderBridge.swift */,
 				AD1B72ECCFBA8D32BD32C40A /* FinderMonitor.swift */,
 				346A04A55C9D82974F4ACB4E /* Info.plist */,
+				A35A33369E830B9C3911B68E /* InfoPlist.strings */,
+				27D52A2A04E33C49325F446D /* LaunchAtLoginManager.swift */,
+				9C46A161087A49CD5400678F /* Localizable.strings */,
 				22021D10BF90F928E6922897 /* Menu3App.swift */,
 				DBEBC46A73E65F1C64CF8A51 /* MenuPresenter.swift */,
 				CB7F6475954C992B0D5B7975 /* MultitouchPrivate.swift */,
@@ -70,6 +87,7 @@
 				278FD8ABDF9B32ADB6BC098B /* AppLauncher.swift */,
 				57B3F88DEF6744AD31FD82DA /* Constants.swift */,
 				2B460F0AF07BD82A32AA6F83 /* FileActions.swift */,
+				A52247AC8746B60618BC2AF1 /* Localization.swift */,
 				0129D8DCE5B343A630023FFC /* RecentAppsManager.swift */,
 			);
 			path = Shared;
@@ -124,7 +142,6 @@
 				TargetAttributes = {
 					5C00FDC21488CF55C6ADA84F = {
 						DevelopmentTeam = M9HUJXV356;
-						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -134,6 +151,9 @@
 			knownRegions = (
 				Base,
 				en,
+				ja,
+				ko,
+				"zh-Hans",
 			);
 			mainGroup = B7159E9B3E99DA4D7224D154;
 			minimizedProjectReferenceProxies = 1;
@@ -153,6 +173,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				44478ED498C2252F9E10D958 /* Assets.xcassets in Resources */,
+				E5AC38000C85A12E8A0388BD /* InfoPlist.strings in Resources */,
+				6DCB1BD489979C7D3EF0473F /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,6 +192,8 @@
 				8586A724C8897443E7215F00 /* FileMover.swift in Sources */,
 				7164628D72A4CF2B3DEACA52 /* FinderBridge.swift in Sources */,
 				6BEB160E9C7C6B329F64B53E /* FinderMonitor.swift in Sources */,
+				0909E7E309D51C28861DB850 /* LaunchAtLoginManager.swift in Sources */,
+				D54F21BDA77EE49F00A94C17 /* Localization.swift in Sources */,
 				3CB352D89DA2AE5BD62F0DB4 /* Menu3App.swift in Sources */,
 				D5815EFB5DEBB48E2324AEF8 /* MenuPresenter.swift in Sources */,
 				49F066DB82917A5996019916 /* MultitouchPrivate.swift in Sources */,
@@ -181,6 +205,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		9C46A161087A49CD5400678F /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				434A1D79C51DE833F4A111E8 /* en */,
+				59250532E827646A4A6884D0 /* ja */,
+				6324C8F68E90F545D1FA49FD /* ko */,
+				5CDD89D89EEEB796F40C06FC /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		A35A33369E830B9C3911B68E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				92FBAD87C88327B0DB2B0DD7 /* en */,
+				2FA911CDD4D9CAC2FDD59AC7 /* ja */,
+				1AA8D9CDFE634B5D3DB95A37 /* ko */,
+				59A0BD4655972EFB693E22F4 /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		09B6BA253C510209602452EF /* Release */ = {
@@ -233,7 +282,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -249,7 +298,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Menu3/Menu3.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = Menu3/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -272,7 +324,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Menu3/Menu3.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Menu3/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -346,7 +401,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;

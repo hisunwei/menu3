@@ -33,8 +33,8 @@ class AppLauncher {
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = false
         panel.treatsFilePackagesAsDirectories = false
-        panel.prompt = "打开"
-        panel.message = "选择要在当前目录打开的应用"
+        panel.prompt = L("打开")
+        panel.message = L("选择要在当前目录打开的应用")
 
         if panel.runModal() == .OK, let url = panel.url {
             launchApp(at: url, currentDirectory: currentDirectory)

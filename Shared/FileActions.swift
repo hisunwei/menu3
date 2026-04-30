@@ -62,6 +62,62 @@ enum FileActions {
         )
     }
 
+    static func createNewFolder(in directoryURL: URL) {
+        let folderURL = nextUntitledFolderURL(in: directoryURL)
+        do {
+            try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: false)
+            revealAndBeginRename(fileURL: folderURL)
+        } catch {
+            NSLog("RightMenu: failed to create folder at %@, error: %@", folderURL.path, error.localizedDescription)
+        }
+    }
+
+    static func promptAndGoToFolder() {
+        let alert = NSAlert()
+        alert.messageText = L("前往文件夹")
+        alert.informativeText = L("请输入要前往的路径")
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: L("前往"))
+        alert.addButton(withTitle: L("取消"))
+
+        let inputField = NSTextField(frame: NSRect(x: 0, y: 0, width: 360, height: 24))
+        inputField.placeholderString = L("例如：~/Desktop 或 /Users/yourname/Documents")
+        if let currentDirectory = FinderBridge.shared.currentDirectoryURL() {
+            inputField.stringValue = currentDirectory.path
+        }
+        alert.accessoryView = inputField
+
+        NSApp.activate(ignoringOtherApps: true)
+        let response = alert.runModal()
+        guard response == .alertFirstButtonReturn else { return }
+
+        let rawPath = inputField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !rawPath.isEmpty else {
+            showInvalidPathAlert()
+            return
+        }
+
+        let expandedPath = (rawPath as NSString).expandingTildeInPath
+        let inputURL = URL(fileURLWithPath: expandedPath).standardizedFileURL
+        var isDirectory = ObjCBool(false)
+        let exists = FileManager.default.fileExists(atPath: inputURL.path, isDirectory: &isDirectory)
+        guard exists else {
+            showInvalidPathAlert()
+            return
+        }
+
+        let targetDirectoryURL = isDirectory.boolValue ? inputURL : inputURL.deletingLastPathComponent()
+        guard FileManager.default.fileExists(atPath: targetDirectoryURL.path, isDirectory: &isDirectory), isDirectory.boolValue else {
+            showInvalidPathAlert()
+            return
+        }
+
+        let opened = FinderBridge.shared.goToDirectory(targetDirectoryURL)
+        if !opened {
+            NSLog("RightMenu: failed to go to directory %@", targetDirectoryURL.path)
+        }
+    }
+
     static func hasFileURLsInClipboard() -> Bool {
         let classes: [AnyClass] = [NSURL.self]
         let options: [NSPasteboard.ReadingOptionKey: Any] = [.urlReadingFileURLsOnly: true]
@@ -138,14 +194,25 @@ enum FileActions {
     }
 
     private static func nextUntitledTextFileURL(in directoryURL: URL) -> URL {
-        var fileName = "未命名.txt"
+        var fileName = L("未命名.txt")
         var counter = 2
 
         while FileManager.default.fileExists(atPath: directoryURL.appendingPathComponent(fileName).path) {
-            fileName = "未命名 \(counter).txt"
+            fileName = LF("未命名 %d.txt", counter)
             counter += 1
         }
         return directoryURL.appendingPathComponent(fileName)
+    }
+
+    private static func nextUntitledFolderURL(in directoryURL: URL) -> URL {
+        var folderName = L("新建文件夹")
+        var counter = 2
+
+        while FileManager.default.fileExists(atPath: directoryURL.appendingPathComponent(folderName).path) {
+            folderName = LF("新建文件夹 %d", counter)
+            counter += 1
+        }
+        return directoryURL.appendingPathComponent(folderName, isDirectory: true)
     }
 
     private static func uniqueDestinationURL(for sourceURL: URL, in directoryURL: URL) -> URL {
@@ -191,5 +258,14 @@ enum FileActions {
         if let error {
             NSLog("RightMenu: failed to trigger rename via AppleScript: %@", error)
         }
+    }
+
+    private static func showInvalidPathAlert() {
+        let alert = NSAlert()
+        alert.messageText = L("路径错误，请检查路径。")
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: L("确定"))
+        NSApp.activate(ignoringOtherApps: true)
+        alert.runModal()
     }
 }

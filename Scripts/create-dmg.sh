@@ -4,15 +4,28 @@ set -e
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$PROJECT_DIR"
 
-APP_PATH="./build/Build/Products/Release/Menu3.app"
-DMG_NAME="Menu3.dmg"
+TARGET_BUILD_DIR="$(xcodebuild -project menu3.xcodeproj -scheme menu3 -configuration Release -showBuildSettings 2>/dev/null | awk -F ' = ' '/^[[:space:]]*TARGET_BUILD_DIR = / {print $2; exit}')"
+FULL_PRODUCT_NAME="$(xcodebuild -project menu3.xcodeproj -scheme menu3 -configuration Release -showBuildSettings 2>/dev/null | awk -F ' = ' '/^[[:space:]]*FULL_PRODUCT_NAME = / {print $2; exit}')"
+APP_PATH="${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}"
+APP_VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$APP_PATH/Contents/Info.plist" 2>/dev/null || true)"
+
+if [ -z "$APP_VERSION" ]; then
+    APP_VERSION="latest"
+fi
+
+DMG_NAME="Menu3-${APP_VERSION}.dmg"
+LATEST_DMG="Menu3.dmg"
 
 if [ ! -d "$APP_PATH" ]; then
-    echo "Error: $APP_PATH not found. Run build.sh first."
+    APP_PATH="./build/Build/Products/Release/Menu3.app"
+fi
+
+if [ ! -d "$APP_PATH" ]; then
+    echo "Error: Release app not found. Run build.sh first."
     exit 1
 fi
 
-rm -f "$DMG_NAME"
+rm -f "$DMG_NAME" "$LATEST_DMG"
 
 if command -v create-dmg &>/dev/null; then
     create-dmg \
@@ -34,5 +47,8 @@ else
     rm -rf "$TEMP_DIR"
 fi
 
+cp -f "$DMG_NAME" "$LATEST_DMG"
+
 echo ""
 echo "✅ DMG created: $PROJECT_DIR/$DMG_NAME"
+echo "✅ DMG latest alias: $PROJECT_DIR/$LATEST_DMG"

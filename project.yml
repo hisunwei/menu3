@@ -9,7 +9,7 @@ options:
 
 settings:
   base:
-    MARKETING_VERSION: "1.0.0"
+    MARKETING_VERSION: "1.0.1"
     CURRENT_PROJECT_VERSION: "1"
     SWIFT_VERSION: "5.9"
     CODE_SIGN_STYLE: Automatic
@@ -34,6 +34,13 @@ targets:
       properties:
         CFBundleDevelopmentRegion: zh_CN
         CFBundleDisplayName: Menu3
+        CFBundleLocalizations:
+          - zh-Hans
+          - en
+          - ja
+          - ko
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
         LSUIElement: true
         NSAppleEventsUsageDescription: "Menu3 需要与 Finder 通信以获取当前目录和选中文件"
@@ -47,3 +54,12 @@ targets:
           - "-F/System/Library/PrivateFrameworks"
           - "-framework"
           - "MultitouchSupport"
+      configs:
+        Debug:
+          CODE_SIGN_STYLE: Automatic
+          CODE_SIGN_IDENTITY: "Apple Development"
+          ENABLE_HARDENED_RUNTIME: NO
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: "Developer ID Application"
+          ENABLE_HARDENED_RUNTIME: YES

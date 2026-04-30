@@ -13,8 +13,11 @@ struct Menu3App: App {
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private var settingsWindow: NSWindow?
+    private let installDateKey = "menu3.installDate"
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        persistInstallDateIfNeeded()
+
         // Hide dock icon — menu bar only
         NSApp.setActivationPolicy(.accessory)
 
@@ -23,11 +26,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let button = statusItem.button {
             if let img = NSImage(named: "StatusBarIcon") {
                 img.size = NSSize(width: 18, height: 18)
-                img.isTemplate = true
+                img.isTemplate = false
                 button.image = img
             } else if let appIcon = NSImage(named: "AppIcon") {
                 appIcon.size = NSSize(width: 18, height: 18)
-                appIcon.isTemplate = true
+                appIcon.isTemplate = false
                 button.image = appIcon
             } else {
                 button.title = "M3"
@@ -54,13 +57,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func rebuildMenu(_ menu: NSMenu) {
         menu.removeAllItems()
 
-        menu.addItem(withTitle: "设置…", action: #selector(openSettings), keyEquivalent: ",")
-        menu.addItem(withTitle: "关于 Menu3", action: #selector(showAbout), keyEquivalent: "")
+        menu.addItem(withTitle: L("设置…"), action: #selector(openSettings), keyEquivalent: ",")
+        menu.addItem(withTitle: L("关于 Menu3"), action: #selector(showAbout), keyEquivalent: "")
+        addLanguageMenuItem(to: menu)
         menu.addItem(.separator())
 
         // Accessibility status
         let hasAcc = FinderMonitor.hasAccessibilityPermission
-        let accItem = NSMenuItem(title: hasAcc ? "辅助功能已授权" : "辅助功能未授权", action: nil, keyEquivalent: "")
+        let accItem = NSMenuItem(title: hasAcc ? L("辅助功能已授权") : L("辅助功能未授权"), action: nil, keyEquivalent: "")
         accItem.isEnabled = false
         if hasAcc {
             accItem.image = menuStatusImage(systemName: "checkmark.circle.fill", color: .systemGreen)
@@ -70,12 +74,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(accItem)
 
         if !FinderMonitor.hasAccessibilityPermission {
-            menu.addItem(withTitle: "授权辅助功能…", action: #selector(requestAccessibility), keyEquivalent: "")
+            menu.addItem(withTitle: L("授权辅助功能…"), action: #selector(requestAccessibility), keyEquivalent: "")
         }
 
         // Screenshot status
         let screenshotEnabled = TriggerSettings.shared.screenshotEnabled
-        let ssItem = NSMenuItem(title: screenshotEnabled ? "截图功能已开启" : "截图功能未开启", action: nil, keyEquivalent: "")
+        let ssItem = NSMenuItem(title: screenshotEnabled ? L("截图功能已开启") : L("截图功能未开启"), action: nil, keyEquivalent: "")
         ssItem.isEnabled = false
         ssItem.image = menuStatusImage(
             systemName: screenshotEnabled ? "camera.fill" : "camera",
@@ -83,8 +87,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
         menu.addItem(ssItem)
 
+        let launchAtLoginEnabled = LaunchAtLoginManager.shared.state == .enabled
+        let launchAtLoginItem = NSMenuItem(
+            title: launchAtLoginEnabled ? L("开机启动已设置") : L("开机启动未设置"),
+            action: launchAtLoginEnabled ? nil : #selector(configureLaunchAtLogin),
+            keyEquivalent: ""
+        )
+        launchAtLoginItem.isEnabled = !launchAtLoginEnabled
+        launchAtLoginItem.image = menuStatusImage(
+            systemName: launchAtLoginEnabled ? "power.circle.fill" : "power.circle",
+            color: launchAtLoginEnabled ? .systemGreen : .systemOrange
+        )
+        menu.addItem(launchAtLoginItem)
+
         menu.addItem(.separator())
-        menu.addItem(withTitle: "退出 Menu3", action: #selector(quit), keyEquivalent: "q")
+        menu.addItem(withTitle: L("退出 Menu3"), action: #selector(quit), keyEquivalent: "q")
 
         for item in menu.items where item.action != nil {
             item.target = self
@@ -123,7 +140,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 backing: .buffered,
                 defer: false
             )
-            window.title = "Menu3 设置"
+            window.title = L("Menu3 设置")
             window.contentView = NSHostingView(rootView: ContentView())
             window.center()
             window.isReleasedWhenClosed = false
@@ -138,15 +155,53 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc private func showAbout() {
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
-        NSApp.orderFrontStandardAboutPanel(nil)
+        let options: [NSApplication.AboutPanelOptionKey: Any] = [
+            .credits: NSAttributedString(string: L("当前为公测版本，感谢早期支持者。"))
+        ]
+        NSApp.orderFrontStandardAboutPanel(options: options)
     }
 
     @objc private func requestAccessibility() {
         FinderMonitor.requestAccessibilityPermission()
     }
 
+    @objc private func configureLaunchAtLogin() {
+        LaunchAtLoginManager.shared.guideEnableIfNeeded()
+    }
+
     @objc private func quit() {
         NSApplication.shared.terminate(nil)
+    }
+
+    @objc private func selectLanguage(_ sender: NSMenuItem) {
+        guard let raw = sender.representedObject as? String,
+              let language = AppLanguage(rawValue: raw) else { return }
+        LanguageManager.shared.setLanguage(language)
+        if let menu = statusItem.menu {
+            rebuildMenu(menu)
+        }
+    }
+
+    private func addLanguageMenuItem(to menu: NSMenu) {
+        let current = LanguageManager.shared.currentLanguage
+        let title = LF("语言：%@", current.displayName)
+        let langItem = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+        let submenu = NSMenu(title: L("语言"))
+        for language in AppLanguage.allCases {
+            let item = NSMenuItem(title: language.displayName, action: #selector(selectLanguage(_:)), keyEquivalent: "")
+            item.target = self
+            item.representedObject = language.rawValue
+            item.state = language == current ? .on : .off
+            submenu.addItem(item)
+        }
+        langItem.submenu = submenu
+        menu.addItem(langItem)
+    }
+
+    private func persistInstallDateIfNeeded() {
+        let defaults = UserDefaults.standard
+        guard defaults.object(forKey: installDateKey) == nil else { return }
+        defaults.set(Date(), forKey: installDateKey)
     }
 }
 
@@ -165,4 +220,3 @@ extension AppDelegate: NSMenuDelegate {
         rebuildMenu(menu)
     }
 }
-

@@ -1,0 +1,2 @@
+"NSAppleEventsUsageDescription" = "Menu3 は現在のディレクトリと選択中ファイルを取得するために Finder との通信が必要です。";
+"NSScreenCaptureUsageDescription" = "Menu3 は ⌘⇧A スクリーンショット機能のために画面収録の権限が必要です。";

@@ -10,8 +10,8 @@ final class ScreenshotManager: ObservableObject {
 
         var displayText: String {
             switch self {
-            case .granted: return "✅ 屏幕录制已授权"
-            case .denied:  return "⚠️ 需要屏幕录制权限"
+            case .granted: return L("✅ 屏幕录制已授权")
+            case .denied:  return L("⚠️ 需要屏幕录制权限")
             }
         }
     }
@@ -66,4 +66,3 @@ final class ScreenshotManager: ObservableObject {
         s.start()
     }
 }
-

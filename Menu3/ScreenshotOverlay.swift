@@ -69,7 +69,7 @@ final class ScreenshotSession {
         panel.allowedContentTypes = [.png]
         let fmt = DateFormatter()
         fmt.dateFormat = "yyyy-MM-dd HH.mm.ss"
-        panel.nameFieldStringValue = "截图 \(fmt.string(from: Date())).png"
+        panel.nameFieldStringValue = "\(L("截图")) \(fmt.string(from: Date())).png"
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
         panel.begin { response in
@@ -607,7 +607,7 @@ private final class AnnotationToolbar: NSView {
         let undoBtn   = makeIconBtn(icon: "arrow.uturn.backward", action: #selector(doUndo))
         let confirmBtn = makeIconBtn(icon: "checkmark", action: #selector(doCopy))
         confirmBtn.contentTintColor = NSColor.systemGreen
-        let saveBtn   = makeTextBtn(title: "保存", icon: "square.and.arrow.down", action: #selector(doSave))
+        let saveBtn   = makeTextBtn(title: L("保存"), icon: "square.and.arrow.down", action: #selector(doSave))
         let cancelBtn = makeIconBtn(icon: "xmark", action: #selector(doCancel))
         cancelBtn.contentTintColor = NSColor(white: 0.7, alpha: 1)
 

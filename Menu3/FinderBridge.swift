@@ -48,11 +48,35 @@ final class FinderBridge {
         NSWorkspace.shared.activateFileViewerSelecting(urls)
     }
 
+    /// Navigates Finder to the given directory URL.
+    @discardableResult
+    func goToDirectory(_ directoryURL: URL) -> Bool {
+        let escapedPath = escapeAppleScriptPath(directoryURL.path)
+        let script = """
+        tell application "Finder"
+            activate
+            set targetFolder to POSIX file "\(escapedPath)" as alias
+            if (count of Finder windows) > 0 then
+                set target of front Finder window to targetFolder
+            else
+                make new Finder window to targetFolder
+            end if
+        end tell
+        """
+        return runAppleScript(script) != nil
+    }
+
     private func runAppleScript(_ source: String) -> String? {
         var error: NSDictionary?
         guard let script = NSAppleScript(source: source) else { return nil }
         let result = script.executeAndReturnError(&error)
         if error != nil { return nil }
         return result.stringValue
+    }
+
+    private func escapeAppleScriptPath(_ path: String) -> String {
+        path
+            .replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "\"", with: "\\\"")
     }
 }

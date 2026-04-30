@@ -1,0 +1,2 @@
+"NSAppleEventsUsageDescription" = "Menu3 needs to communicate with Finder to get the current directory and selected files.";
+"NSScreenCaptureUsageDescription" = "Menu3 needs Screen Recording permission to support the ⌘⇧A screenshot feature.";

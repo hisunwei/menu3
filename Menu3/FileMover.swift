@@ -19,11 +19,16 @@ final class FileMover {
 
     var pendingDescription: String {
         guard let op = operation, !sourceURLs.isEmpty else { return "" }
-        let verb = op == .copy ? "复制" : "移动"
         if sourceURLs.count == 1 {
-            return "\(verb) \"\(sourceURLs[0].lastPathComponent)\" 到这里"
+            if op == .copy {
+                return LF("复制 \"%@\" 到这里", sourceURLs[0].lastPathComponent)
+            }
+            return LF("移动 \"%@\" 到这里", sourceURLs[0].lastPathComponent)
         }
-        return "\(verb) \(sourceURLs.count) 个项目到这里"
+        if op == .copy {
+            return LF("复制 %d 个项目到这里", sourceURLs.count)
+        }
+        return LF("移动 %d 个项目到这里", sourceURLs.count)
     }
 
     func stage(urls: [URL], operation: FileMoveOperation) {
@@ -40,16 +45,16 @@ final class FileMover {
     func execute(to destinationDir: URL) {
         guard let op = operation, !sourceURLs.isEmpty else { return }
 
-        let verb = op == .copy ? "复制" : "移动"
+        let verb = op == .copy ? L("复制") : L("移动")
         let fileList = sourceURLs.map { "  · \($0.lastPathComponent)" }.joined(separator: "\n")
-        let message = "\(verb)以下 \(sourceURLs.count) 个项目到：\n\(destinationDir.path)\n\n\(fileList)"
+        let message = LF("%@以下 %d 个项目到：\n%@\n\n%@", verb, sourceURLs.count, destinationDir.path, fileList)
 
         let alert = NSAlert()
-        alert.messageText = "\(verb)确认"
+        alert.messageText = LF("%@确认", verb)
         alert.informativeText = message
         alert.alertStyle = .informational
         alert.addButton(withTitle: verb)
-        alert.addButton(withTitle: "取消")
+        alert.addButton(withTitle: L("取消"))
 
         // Show as a standalone modal
         NSApp.activate(ignoringOtherApps: true)
@@ -86,10 +91,10 @@ final class FileMover {
 
         if !errors.isEmpty {
             let alert = NSAlert()
-            alert.messageText = "部分操作失败"
+            alert.messageText = L("部分操作失败")
             alert.informativeText = errors.joined(separator: "\n")
             alert.alertStyle = .warning
-            alert.addButton(withTitle: "确定")
+            alert.addButton(withTitle: L("确定"))
             alert.runModal()
         }
 
