@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0909E7E309D51C28861DB850 /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D52A2A04E33C49325F446D /* LaunchAtLoginManager.swift */; };
+		255ABA3EBA8E79BFE6CFF574 /* LemonSqueezyClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF89354A2DDA8E074504EA70 /* LemonSqueezyClient.swift */; };
 		2565A22EA923B3F22FAAF4EA /* ScreenshotOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7120E555ABECCEA87FBC4F5 /* ScreenshotOverlay.swift */; };
 		27E9D6F85EB9860681EA8A00 /* AppLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278FD8ABDF9B32ADB6BC098B /* AppLauncher.swift */; };
 		3CB352D89DA2AE5BD62F0DB4 /* Menu3App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22021D10BF90F928E6922897 /* Menu3App.swift */; };
@@ -21,6 +22,7 @@
 		713997550005CC56804A702F /* TriggerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C85086C106980BD2F0261A /* TriggerSettings.swift */; };
 		7164628D72A4CF2B3DEACA52 /* FinderBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900132E63EE3525909686AB1 /* FinderBridge.swift */; };
 		8586A724C8897443E7215F00 /* FileMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0E18FD946AF2CC08C21FBB /* FileMover.swift */; };
+		87C1262D04645AAF0A16F130 /* LicensingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B773721021B2EFB0CC0271 /* LicensingManager.swift */; };
 		A4AA09E2672C544C69A3D60F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B3F88DEF6744AD31FD82DA /* Constants.swift */; };
 		BB6DB8355917661E93A37976 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DB363709919BEE72EC91A0 /* ContentView.swift */; };
 		D54F21BDA77EE49F00A94C17 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52247AC8746B60618BC2AF1 /* Localization.swift */; };
@@ -44,6 +46,7 @@
 		5CDD89D89EEEB796F40C06FC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		6324C8F68E90F545D1FA49FD /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		71C85086C106980BD2F0261A /* TriggerSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerSettings.swift; sourceTree = "<group>"; };
+		72B773721021B2EFB0CC0271 /* LicensingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensingManager.swift; sourceTree = "<group>"; };
 		8DDD3DDE3B312A9200617A02 /* ScreenshotManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotManager.swift; sourceTree = "<group>"; };
 		900132E63EE3525909686AB1 /* FinderBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinderBridge.swift; sourceTree = "<group>"; };
 		92FBAD87C88327B0DB2B0DD7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -55,6 +58,7 @@
 		DBEBC46A73E65F1C64CF8A51 /* MenuPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuPresenter.swift; sourceTree = "<group>"; };
 		E3DB363709919BEE72EC91A0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		EA0E18FD946AF2CC08C21FBB /* FileMover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileMover.swift; sourceTree = "<group>"; };
+		EF89354A2DDA8E074504EA70 /* LemonSqueezyClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LemonSqueezyClient.swift; sourceTree = "<group>"; };
 		F3509076AC927139CCE17E7E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -87,6 +91,8 @@
 				278FD8ABDF9B32ADB6BC098B /* AppLauncher.swift */,
 				57B3F88DEF6744AD31FD82DA /* Constants.swift */,
 				2B460F0AF07BD82A32AA6F83 /* FileActions.swift */,
+				EF89354A2DDA8E074504EA70 /* LemonSqueezyClient.swift */,
+				72B773721021B2EFB0CC0271 /* LicensingManager.swift */,
 				A52247AC8746B60618BC2AF1 /* Localization.swift */,
 				0129D8DCE5B343A630023FFC /* RecentAppsManager.swift */,
 			);
@@ -141,7 +147,7 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					5C00FDC21488CF55C6ADA84F = {
-						DevelopmentTeam = M9HUJXV356;
+						DevelopmentTeam = RSSJ2JZ7M3;
 					};
 				};
 			};
@@ -193,6 +199,8 @@
 				7164628D72A4CF2B3DEACA52 /* FinderBridge.swift in Sources */,
 				6BEB160E9C7C6B329F64B53E /* FinderMonitor.swift in Sources */,
 				0909E7E309D51C28861DB850 /* LaunchAtLoginManager.swift in Sources */,
+				255ABA3EBA8E79BFE6CFF574 /* LemonSqueezyClient.swift in Sources */,
+				87C1262D04645AAF0A16F130 /* LicensingManager.swift in Sources */,
 				D54F21BDA77EE49F00A94C17 /* Localization.swift in Sources */,
 				3CB352D89DA2AE5BD62F0DB4 /* Menu3App.swift in Sources */,
 				D5815EFB5DEBB48E2324AEF8 /* MenuPresenter.swift in Sources */,
@@ -270,7 +278,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = M9HUJXV356;
+				DEVELOPMENT_TEAM = RSSJ2JZ7M3;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -383,7 +391,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = M9HUJXV356;
+				DEVELOPMENT_TEAM = RSSJ2JZ7M3;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

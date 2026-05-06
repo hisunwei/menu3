@@ -139,8 +139,6 @@ struct ContentView: View {
                     }
                 }
 
-                Divider()
-
                 // ========== Section 2: 截图功能 ==========
                 VStack(alignment: .leading, spacing: 14) {
                     Label(L("截图功能"), systemImage: "camera.viewfinder")
@@ -221,7 +219,25 @@ struct ContentView: View {
                     }
                 }
 
-                Spacer(minLength: 10)
+                Divider()
+
+                // ========== Section 3: About ==========
+                VStack(alignment: .leading, spacing: 14) {
+                    Label(L("关于 Menu3"), systemImage: "info.circle")
+                        .font(.headline)
+
+                    GroupBox {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(L("当前为公测版本，感谢早期支持者。"))
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(4)
+                    }
+                }
+
             }
             .padding(30)
         }

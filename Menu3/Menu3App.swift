@@ -10,13 +10,16 @@ struct Menu3App: App {
     }
 }
 
+@MainActor
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private var settingsWindow: NSWindow?
     private let installDateKey = "menu3.installDate"
+    private let licensing = LicensingManager.shared
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         persistInstallDateIfNeeded()
+        licensing.refreshEntitlement()
 
         // Hide dock icon — menu bar only
         NSApp.setActivationPolicy(.accessory)
@@ -52,9 +55,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self?.handleTrigger(at: mouseLocation)
         }
         FinderMonitor.shared.start()
+
+        Task { @MainActor in
+            await licensing.refreshLicenseStatusIfNeeded(force: false)
+            licensing.promptExpiredIfNeeded()
+        }
     }
 
     private func rebuildMenu(_ menu: NSMenu) {
+        licensing.refreshEntitlement()
         menu.removeAllItems()
 
         menu.addItem(withTitle: L("设置…"), action: #selector(openSettings), keyEquivalent: ",")
@@ -101,6 +110,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(launchAtLoginItem)
 
         menu.addItem(.separator())
+
+        switch licensing.entitlement {
+        case .trial(let daysRemaining, _):
+            let item = NSMenuItem(title: LF("Trial: %d days left", daysRemaining), action: nil, keyEquivalent: "")
+            item.isEnabled = false
+            item.image = menuStatusImage(systemName: "hourglass", color: .systemBlue)
+            menu.addItem(item)
+            menu.addItem(withTitle: LF("Buy Lifetime (%@)…", licensing.formattedPrice), action: #selector(openPurchasePage), keyEquivalent: "")
+            menu.addItem(withTitle: L("Activate License…"), action: #selector(openActivateLicenseDialog), keyEquivalent: "")
+        case .lifetime:
+            let item = NSMenuItem(title: L("Lifetime Activated"), action: nil, keyEquivalent: "")
+            item.isEnabled = false
+            item.image = menuStatusImage(systemName: "checkmark.seal.fill", color: .systemGreen)
+            menu.addItem(item)
+        case .expired:
+            let item = NSMenuItem(title: L("Trial expired"), action: nil, keyEquivalent: "")
+            item.isEnabled = false
+            item.image = menuStatusImage(systemName: "clock.badge.exclamationmark", color: .systemOrange)
+            menu.addItem(item)
+            menu.addItem(withTitle: LF("Buy Lifetime (%@)…", licensing.formattedPrice), action: #selector(openPurchasePage), keyEquivalent: "")
+            menu.addItem(withTitle: L("Activate License…"), action: #selector(openActivateLicenseDialog), keyEquivalent: "")
+        }
         menu.addItem(withTitle: L("退出 Menu3"), action: #selector(quit), keyEquivalent: "q")
 
         for item in menu.items where item.action != nil {
@@ -163,6 +194,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func requestAccessibility() {
         FinderMonitor.requestAccessibilityPermission()
+    }
+
+    @objc private func openPurchasePage() {
+        licensing.openCheckout()
+    }
+
+    @objc private func openActivateLicenseDialog() {
+        licensing.presentActivateDialog()
     }
 
     @objc private func configureLaunchAtLogin() {

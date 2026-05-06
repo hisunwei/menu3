@@ -55,6 +55,12 @@ final class ScreenshotManager: ObservableObject {
     /// Launches the custom WeChat-style screenshot overlay.
     func takeInteractiveScreenshot() {
         guard session == nil else { return } // Prevent double-launch
+        guard LicensingManager.isFeatureUnlockedNow() else {
+            DispatchQueue.main.async {
+                LicensingManager.shared.promptExpiredIfNeeded()
+            }
+            return
+        }
         refreshPermissionStatus()
         guard permissionStatus == .granted else {
             Self.requestPermission()

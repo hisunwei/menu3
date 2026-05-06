@@ -165,6 +165,12 @@ final class FinderMonitor {
     private func trigger() {
         let now = ProcessInfo.processInfo.systemUptime
         guard now - lastTriggerTime > 0.5 else { return }
+        guard LicensingManager.isFeatureUnlockedNow() else {
+            DispatchQueue.main.async {
+                LicensingManager.shared.promptExpiredIfNeeded()
+            }
+            return
+        }
 
         guard let frontApp = NSWorkspace.shared.frontmostApplication,
               frontApp.bundleIdentifier == "com.apple.finder" else { return }

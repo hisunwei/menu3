@@ -31,6 +31,12 @@
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>Menu3LemonSqueezyCheckoutURL</key>
+	<string>http://hisunwei.com/menu3/buy</string>
+	<key>Menu3LifetimePriceUSD</key>
+	<real>9.9000000000000004</real>
+	<key>Menu3TrialDays</key>
+	<integer>90</integer>
 	<key>NSAppleEventsUsageDescription</key>
 	<string>Menu3 需要与 Finder 通信以获取当前目录和选中文件</string>
 	<key>NSScreenCaptureUsageDescription</key>
